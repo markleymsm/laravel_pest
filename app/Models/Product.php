@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,5 +30,10 @@ class Product extends Model
     public function title(): Attribute
     {
         return new Attribute(get: fn ($value) => ucfirst($value));
+    }
+
+    public function scopeReleased(Builder $builder): void
+    {
+        $builder->where('released', true);
     }
 }

@@ -4,6 +4,8 @@ use App\Models\Product;
 
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\assertDatabaseMissing;
+use function Pest\Laravel\deleteJson;
 use function Pest\Laravel\post;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
@@ -57,8 +59,16 @@ it('should be able to update a product', function () {
 });
 
 it('should be able to delete a product', function () {
-	//expect()->
-})->todo();
+	$product = Product::factory()->create(['title' => 'Titulo qualquer']);
+
+	deleteJson(route('product.destroy', $product))->assertOk();
+
+	assertDatabaseMissing('products', [
+		'id' => $product->id,
+	]);
+
+	assertDatabaseCount('products', 0);
+});
 
 it('should be able to list all products', function () {
 	//expect()->

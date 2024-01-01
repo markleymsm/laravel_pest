@@ -9,3 +9,10 @@ test('model relationship :: product owner should be an user', function () {
 
     expect($product->owner)->toBeInstanceOf(User::class);
 });
+
+test('model get mutator :: product title should be always be str()->title()', function () {
+    
+    $product = Product::factory()->create(['title' => 'titulo']);
+
+    expect($product)->title->toBe('Titulo');
+});

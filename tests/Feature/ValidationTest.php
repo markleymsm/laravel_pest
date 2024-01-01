@@ -12,4 +12,10 @@ test('product :: title should have a max of 255 characters', function () {
     ->assertInvalid(['title' => trans('validation.max.string', ['attribute' => 'title', 'max' => 255])]);
 });
 
-
+test('create product validations', function ($data, $errors) {
+  postJson(route('product.store'), $data)
+    ->assertInvalid($errors);
+})->with([
+  'title:required' => [['title' => ''], ['title' => 'required']],
+  'title:max:255' => [['title' => str_repeat('*', 256)], ['title' => 'The title field must not be greater than 255 characters.']],
+]);

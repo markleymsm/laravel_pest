@@ -13,9 +13,14 @@ class Product extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['title'];
+    protected $fillable = [
+        'title',
+        'code',
+    ];
 
-
+    protected $casts = [
+        'code' => 'hashed',
+    ];
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id');

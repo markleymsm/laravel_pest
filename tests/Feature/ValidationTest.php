@@ -12,6 +12,7 @@ test('product :: title should have a max of 255 characters', function () {
     ->assertInvalid(['title' => trans('validation.max.string', ['attribute' => 'title', 'max' => 255])]);
 });
 
+// dataset(grupo de test) para validação dos campos do formulário de cadastro de produtos.
 test('create product validations', function ($data, $errors) {
   postJson(route('product.store'), $data)
     ->assertInvalid($errors);

@@ -5,6 +5,7 @@ use App\Models\Product;
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertDatabaseMissing;
+use function Pest\Laravel\assertSoftDeleted;
 use function Pest\Laravel\deleteJson;
 use function Pest\Laravel\post;
 use function Pest\Laravel\postJson;
@@ -68,6 +69,18 @@ it('should be able to delete a product', function () {
 	]);
 
 	assertDatabaseCount('products', 0);
+});
+
+it('should be able to soft-delete a product', function () {
+	$product = Product::factory()->create(['title' => 'Titulo qualquer']);
+
+	deleteJson(route('product.soft-delete', $product))->assertOk();
+
+	assertSoftDeleted('products', [
+		'id' => $product->id,
+	]);
+
+	assertDatabaseCount('products', 1);
 });
 
 it('should be able to list all products', function () {

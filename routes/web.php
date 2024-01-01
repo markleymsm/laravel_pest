@@ -34,8 +34,10 @@ Route::get('/products-db', function () {
 
 
 Route::post('/products', function () {
-    request()->validate(['title' => 'required']);
-    
+    request()->validate([
+        'title' => ['required', 'max:255']
+    ]);
+
     Product::query()->create(request()->only('title'));
 
     return response()->json('', 201);

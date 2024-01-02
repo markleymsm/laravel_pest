@@ -23,7 +23,5 @@ test('an email was send user:x', function () {
 
   post(route('sending-email', $user))->assertOk();
 
-  Mail::assertSent(SendingEmail::class, function (SendingEmail $email) use ($user) {
-    return $email->hasTo($user->email);
-  });
+  Mail::assertSent(SendingEmail::class, fn (SendingEmail $email) => $email->hasTo($user->email));
 });

@@ -17,7 +17,7 @@ class CreateProductAction
                 'owner_id' => $user->id,
             ]);
 
-        auth()->user()->notify(
+        $user->notify(
             new NewProductNotification()
 
         );

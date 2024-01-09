@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\CreateProductAction;
 use App\Jobs\ImportProductJob;
 use App\Mail\SendingEmail;
 use App\Models\Product;
@@ -42,15 +43,11 @@ Route::post('/products', function () {
     request()->validate([
         'title' => ['required', 'max:255']
     ]);
-    
-    Product::query()
-        ->create([
-           'title' => request()->get('title'),
-           'owner_id' => auth()->id()
-        ]);
 
-    auth()->user()->notify(
-        new NewProductNotification()
+    app(CreateProductAction::class)
+    ->handle(
+        request()->get('title'),
+        auth()->user()
     );
 
     return response()->json('', 201);
@@ -75,12 +72,12 @@ Route::delete('/products/{product}/soft-delete', function (Product $product) {
     return response()->json('', 200);
 })->name('product.soft-delete');
 
-Route::post('/import-products', function(){
+Route::post('/import-products', function () {
     $data = request()->get('data');
 
     ImportProductJob::dispatch($data, auth()->id());
 })->name('product.import');
 
-Route::post('/sending-email/{user}', function(User $user){
+Route::post('/sending-email/{user}', function (User $user) {
     Mail::to($user)->send(new SendingEmail($user));
 })->name('sending-email');

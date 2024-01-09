@@ -40,12 +40,12 @@ it('should be able to update a product', function () {
 
 	putJson(
 		route('product.update', $product),
-		['title' => 'atualizando o titulo']
+		['title' => 'Atualizando o titulo']
 	)->assertOk();
 
 	assertDatabaseHas('products', [
 		'id' => $product->id,
-		'title' => 'atualizando o titulo'
+		'title' => 'Atualizando o titulo'
 	]);
 
 	// é uma outra forma de fazer a verificação, 
@@ -55,10 +55,10 @@ it('should be able to update a product', function () {
 	expect($product)
 		->refresh()
 		->title
-		->toBe('atualizando o titulo');
+		->toBe('Atualizando o titulo');
 
 	// outra forma de verificar, é que o valor esperado seja igual ao valor do model atualizado
-	assertSame('atualizando o titulo', $product->title);
+	assertSame('Atualizando o titulo', $product->title);
 
 	assertDatabaseCount('products', 1);
 });

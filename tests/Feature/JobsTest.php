@@ -4,13 +4,16 @@ use App\Jobs\ImportProductJob;
 use App\Models\User;
 use Illuminate\Support\Facades\Queue;
 
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\postJson;
 
 it('should be dispatch a job to the queue', function () {
     Queue::fake();
-
+    $user = User::factory()->create();
+    actingAs($user);
+    
     postJson(route('product.import'), [
         'data' => [
             ['title' => 'Product 1'],
@@ -37,4 +40,3 @@ it('should import products', function () {
     assertDatabaseHas('products', ['title' => 'Product 2']);
     assertDatabaseHas('products', ['title' => 'Product 3']);
 });
-

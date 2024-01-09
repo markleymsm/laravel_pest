@@ -4,6 +4,7 @@ use App\Jobs\ImportProductJob;
 use App\Mail\SendingEmail;
 use App\Models\Product;
 use App\Models\User;
+use App\Notifications\NewProductNotification;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
@@ -41,8 +42,16 @@ Route::post('/products', function () {
     request()->validate([
         'title' => ['required', 'max:255']
     ]);
+    
+    Product::query()
+        ->create([
+           'title' => request()->get('title'),
+           'owner_id' => auth()->id()
+        ]);
 
-    Product::query()->create(request()->only('title'));
+    auth()->user()->notify(
+        new NewProductNotification()
+    );
 
     return response()->json('', 201);
 })->name('product.store');

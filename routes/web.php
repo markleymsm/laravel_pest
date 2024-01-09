@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\ImportProductJob;
 use App\Mail\SendingEmail;
 use App\Models\Product;
 use App\Models\User;
@@ -64,6 +65,12 @@ Route::delete('/products/{product}/soft-delete', function (Product $product) {
 
     return response()->json('', 200);
 })->name('product.soft-delete');
+
+Route::post('/import-products', function(){
+    $data = request()->get('data');
+
+    ImportProductJob::dispatch($data);
+})->name('product.import');
 
 Route::post('/sending-email/{user}', function(User $user){
     Mail::to($user)->send(new SendingEmail($user));

@@ -45,10 +45,10 @@ Route::post('/products', function () {
     ]);
 
     app(CreateProductAction::class)
-    ->handle(
-        request()->get('title'),
-        auth()->user()
-    );
+        ->handle(
+            request()->get('title'),
+            auth()->user()
+        );
 
     return response()->json('', 201);
 })->name('product.store');
@@ -83,4 +83,12 @@ Route::post('/sending-email/{user}', function (User $user) {
 })->name('sending-email');
 
 
-Route::get('/secure-route', fn() => ['hello'])->middleware(SecureRouteMiddleware::class)->name('secure-route');
+Route::get('/secure-route', fn () => ['hello'])
+    ->middleware(SecureRouteMiddleware::class)
+    ->name('secure-route');
+
+Route::post('/upload-avatar', function () {
+    $file = request()->file('file');
+    $file->store(path: '/', options: ['disk' => 'avatar']);
+    return response()->json(['success' => true]);
+})->name('upload-avatar');

@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\CreateProductAction;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Console\Command;
 
 class CreateProductCommand extends Command
@@ -37,11 +39,7 @@ class CreateProductCommand extends Command
             $title = $this->components->ask('Please, provide a title for the product');
         }
 
-
-        Product::query()->create([
-            'title' => $title,
-            'owner_id' => $user,
-        ]);
+        app(CreateProductAction::class)->handle($title, User::find($user));
 
         $this->components->info('Product created!');
     

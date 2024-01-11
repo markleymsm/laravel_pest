@@ -90,5 +90,16 @@ Route::get('/secure-route', fn () => ['hello'])
 Route::post('/upload-avatar', function () {
     $file = request()->file('file');
     $file->store(path: '/', options: ['disk' => 'avatar']);
-    return response()->json(['success' => true]);
 })->name('upload-avatar');
+
+Route::post('/import-products', function () {
+    $file = request()->file('file');
+    $openToRead = fopen($file->getRealPath(), 'r');
+
+    while (($data = fgetcsv($openToRead, 1000, ',')) !== false) {
+        Product::query()->create([
+            'title' => $data[0],
+            'owner_id' => $data[1],
+        ]);
+    }
+})->name('import-products');

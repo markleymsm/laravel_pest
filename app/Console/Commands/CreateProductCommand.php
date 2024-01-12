@@ -39,7 +39,7 @@ class CreateProductCommand extends Command
             $title = $this->components->ask('Please, provide a title for the product');
         }
 
-        app(CreateProductAction::class)->handle($title, User::find($user));
+        app(CreateProductAction::class)->handle($title, User::findOrFail($user));
 
         $this->components->info('Product created!');
     

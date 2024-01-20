@@ -44,3 +44,9 @@ test('testing the data that we send to amazon', function () {
 });
 
 
+it('my config should have at least the key', function () {
+    expect(config('services'))
+    ->toHaveKey('amazon')
+    ->and(config('services.amazon'))
+    ->toHaveKey('api_key');
+});
